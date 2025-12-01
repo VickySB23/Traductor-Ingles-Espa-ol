@@ -1,0 +1,9 @@
+transformers
+torch
+sentencepiece
+EbookLib
+beautifulsoup4
+tqdm
+typer[all]
+colorama
+nltk

@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Data Privacy (CRÍTICO)
+data/input/*
+data/output/*
+data/logs/*
+data/cache/*.db*
+
+# Excepciones (mantener carpetas vacías)
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/cache/.gitkeep
+!data/logs/.gitkeep
