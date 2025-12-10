@@ -4,12 +4,13 @@ from .utils import calculate_hash
 
 class TranslationMemory:
     def __init__(self, db_path=DB_PATH):
-        self.conn = sqlite3.connect(db_path)
+        # FIX: check_same_thread=False permite que la GUI y el motor 
+        # accedan a la DB desde hilos distintos sin dar error.
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.conn.cursor()
         self._create_table()
 
     def _create_table(self):
-        # source_hash es la clave primaria para búsquedas O(1)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS translations (
                 source_hash TEXT PRIMARY KEY,
@@ -21,7 +22,6 @@ class TranslationMemory:
         self.conn.commit()
 
     def get(self, text):
-        """Retorna la traducción si existe, o None"""
         if not text: return None
         text_hash = calculate_hash(text)
         self.cursor.execute("SELECT target_text FROM translations WHERE source_hash=?", (text_hash,))
@@ -29,7 +29,6 @@ class TranslationMemory:
         return result[0] if result else None
 
     def save(self, original, translated):
-        """Guarda una nueva traducción"""
         if not original or not translated: return
         text_hash = calculate_hash(original)
         try:
